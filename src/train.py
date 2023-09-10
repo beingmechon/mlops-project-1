@@ -17,6 +17,10 @@ import mlflow
 import mlflow.xgboost as xg
 
 
+# pylint: disable=E1101
+# pylint: disable=C0301
+# pylint: disable=R0914
+# pylint: disable=R1735
 def calculate_error(y_test, y_pred):
     """Calculate error"""
     mse = mean_squared_error(y_test, y_pred)
@@ -26,7 +30,7 @@ def calculate_error(y_test, y_pred):
     msle = mean_squared_log_error(y_test, y_pred)
     med_abs_error = median_absolute_error(y_test, y_pred)
     max_err = max_error(y_test, y_pred)
-    
+
     return mse, rmse, mae, explained_var_score, msle, med_abs_error, max_err
 
 def main():
@@ -54,7 +58,6 @@ def main():
 
     # Load the Diabetes dataset
     diabetes = load_diabetes()
-    # pylint: disable=E1101
     x_data = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
     y_data = diabetes.target
 
