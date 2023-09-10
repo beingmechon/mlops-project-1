@@ -1,0 +1,92 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+
+description: Train model with sklearn diab data
+
+display_name: demo-diab-pipeline
+experiment_name: demo-diab-pipeline
+jobs:
+
+  # prep_job:
+  #   type: command
+  #   inputs:
+  #     raw_data: 
+  #         type: uri_folder 
+  #         path: ./data
+  #   outputs:
+  #     prep_data: 
+  #       mode: upload
+  #   code: src/prep
+  #   environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+  #   compute: azureml:cpu-cluster
+  #   command: >-
+  #     python prep.py 
+  #     --raw_data ${{inputs.raw_data}} 
+  #     --prep_data ${{outputs.prep_data}}
+  
+  # transform_job:
+  #   type: command
+  #   inputs: 
+  #     clean_data: ${{parent.jobs.prep_job.outputs.prep_data}}
+  #   outputs:
+  #     transformed_data:
+  #       mode: upload
+  #   code: src/transform
+  #   environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+  #   compute: azureml:cpu-cluster
+  #   command: >-
+  #     python transform.py 
+  #     --clean_data ${{inputs.clean_data}} 
+  #     --transformed_data ${{outputs.transformed_data}}
+  
+  train_job:
+    type: command
+    inputs:
+      training_data: ${{parent.jobs.transform_job.outputs.transformed_data}}
+      test_train_ratio: ${{variables.test_train_ratio}}
+    # outputs:
+    #   model_output: 
+    #   test_data: 
+    #     mode: upload
+    code: src
+    environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+    compute: azureml:cpu-cluster
+    command: >-
+      echo ${{inputs.test_train_ratio}} |
+      python train.py 
+      --test_train_ratio ${{inputs.test_train_ratio}} 
+      --lr ${{inputs.lr}} 
+      --n_estimator ${{inputs.n_estimator}}
+      --registered_model_name ${{inputs.registered_model_name}}
+  
+  # predict_job:
+  #   type: command
+  #   inputs:
+  #     model_input: ${{parent.jobs.train_job.outputs.model_output}}
+  #     test_data: ${{parent.jobs.train_job.outputs.test_data}}
+  #   outputs:
+  #     predictions: 
+  #   code: src/predict
+  #   environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+  #   compute: azureml:cpu-cluster
+  #   command: >-
+  #     python predict.py 
+  #     --model_input ${{inputs.model_input}} 
+  #     --test_data ${{inputs.test_data}}
+  #     --predictions ${{outputs.predictions}}
+  
+  # score_job:
+  #   type: command
+  #   inputs:
+  #     predictions: ${{parent.jobs.predict_job.outputs.predictions}}
+  #     model: ${{parent.jobs.train_job.outputs.model_output}}
+  #   outputs:
+  #     score_report: 
+  #   code: src/score
+  #   environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+  #   compute: azureml:cpu-cluster
+  #   command: >-      
+  #     python score.py 
+  #     --predictions ${{inputs.predictions}} 
+  #     --model ${{inputs.model}} 
+  #     --score_report ${{outputs.score_report}} 

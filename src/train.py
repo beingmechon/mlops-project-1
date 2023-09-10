@@ -42,7 +42,7 @@ def main():
     parser.add_argument("--test_train_ratio", type=float, default=0.2)
     parser.add_argument("--lr", type=float, required=False, default=0.1)
     parser.add_argument("--n_estimator", type=int, required=False, default=100)
-    parser.add_argument("--registered_model_name", type=str, help="model name")
+    parser.add_argument("--registered_model_name", type=str, default="model_name")
 
     args = parser.parse_args()
 
