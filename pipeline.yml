@@ -42,7 +42,7 @@ jobs:
   train_job:
     type: command
     inputs:
-      training_data: ${{parent.jobs.transform_job.outputs.transformed_data}}
+      # training_data: ${{parent.jobs.transform_job.outputs.transformed_data}}
       test_train_ratio: ${{variables.test_train_ratio}}
     # outputs:
     #   model_output: 
@@ -54,10 +54,10 @@ jobs:
     command: >-
       echo ${{inputs.test_train_ratio}} |
       python train.py 
-      --test_train_ratio ${{inputs.test_train_ratio}} 
-      --lr ${{inputs.lr}} 
-      --n_estimator ${{inputs.n_estimator}}
-      --registered_model_name ${{inputs.registered_model_name}}
+      --test_train_ratio ${{inputs.test_train_ratio}}       
+  #    --lr ${{inputs.lr}} 
+  #    --n_estimator ${{inputs.n_estimator}}
+  #    --registered_model_name ${{inputs.registered_model_name}}
   
   # predict_job:
   #   type: command
