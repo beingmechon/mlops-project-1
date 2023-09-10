@@ -6,19 +6,31 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (mean_squared_error, 
-                             mean_absolute_error,
-                             explained_variance_score,
-                             mean_squared_log_error,
-                             median_absolute_error,
-                             max_error)
+from sklearn.metrics import (mean_squared_error,
+                        mean_absolute_error,
+                        explained_variance_score,
+                        mean_squared_log_error,
+                        median_absolute_error,
+                        max_error)
 from xgboost import XGBRegressor
 import mlflow
 import mlflow.xgboost as xg
 
 
-def main(): 
+def calculate_error(y_test, y_pred):
+    """Calculate error"""
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(y_test, y_pred)
+    explained_var_score = explained_variance_score(y_test, y_pred)
+    msle = mean_squared_log_error(y_test, y_pred)
+    med_abs_error = median_absolute_error(y_test, y_pred)
+    max_err = max_error(y_test, y_pred)
     
+    return mse, rmse, mae, explained_var_score, msle, med_abs_error, max_err
+
+def main():
+
     """Main function"""
     # input and output argument
     parser = argparse.ArgumentParser()
@@ -42,12 +54,13 @@ def main():
 
     # Load the Diabetes dataset
     diabetes = load_diabetes()
-    X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
-    y = diabetes.target
+    # pylint: disable=E1101
+    x_data = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
+    y_data = diabetes.target
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=args.test_train_ratio, random_state=42
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_data, y_data, test_size=args.test_train_ratio, random_state=42
     )
 
     # train the model
@@ -58,11 +71,11 @@ def main():
         n_estimators=100,
         max_depth=3,
         min_child_weight=1,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        gamma=0,
-        reg_alpha=0,
-        reg_lambda=1,
+        # subsample=0.8,
+        # colsample_bytree=0.8,
+        # gamma=0,
+        # reg_alpha=0,
+        # reg_lambda=1,
         objective='reg:squarederror',  # Use squared error for regression
     )
 
@@ -72,27 +85,21 @@ def main():
         n_estimators=100,
         max_depth=3,
         min_child_weight=1,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        gamma=0,
-        reg_alpha=0,
-        reg_lambda=1,
+        # subsample=0.8,
+        # colsample_bytree=0.8,
+        # gamma=0,
+        # reg_alpha=0,
+        # reg_lambda=1,
         objective='reg:squarederror'
     ))
 
-    model.fit(X_train, y_train)
+    model.fit(x_train, y_train)
 
     # Make predictions on the test set
-    y_pred = model.predict(X_test)
+    y_pred = model.predict(x_test)
 
     # Evaluate the model's performance using multiple metrics
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    mae = mean_absolute_error(y_test, y_pred)
-    explained_var_score = explained_variance_score(y_test, y_pred)
-    msle = mean_squared_log_error(y_test, y_pred)
-    med_abs_error = median_absolute_error(y_test, y_pred)
-    max_err = max_error(y_test, y_pred)
+    mse, rmse, mae, explained_var_score, msle, med_abs_error, max_err = calculate_error(y_test, y_pred)
 
     # log metrics
     mlflow.log_metric('mse', mse)
