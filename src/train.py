@@ -23,7 +23,7 @@ def main():
     # input and output argument
     parser = argparse.ArgumentParser()
     # parser.add_argument("--data", type=str, help="path to input data")
-    parser.add_argument("--test_train_ratio", type=float, default=0.2)
+    parser.add_argument("--test_train_ratio", type=float, default=0.20)
     parser.add_argument("--lr", type=float, required=False, default=0.1)
     parser.add_argument("--n_estimator", type=int, required=False, default=100)
     parser.add_argument("--registered_model_name", type=str, help="model name")
