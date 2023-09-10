@@ -3,7 +3,7 @@
 # Any manual changes to this file may cause incorrect behavior.
 # Any manual changes will be overwritten if the code is regenerated.
 
-name: cli-jobs-pipelines-nyc-taxi-pipeline
+name: cli-jobs-pipelines-diabetes-pipeline
 on:
   workflow_dispatch:
   schedule:
