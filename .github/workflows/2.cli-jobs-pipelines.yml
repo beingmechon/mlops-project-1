@@ -26,6 +26,10 @@ jobs:
     steps:
     - name: check out repo
       uses: actions/checkout@v2
+    - name: Set up Azure CLI
+      uses: azure/setup-azurecli@v1  # Use the setup-azurecli action
+      with:
+        version: latest 
     - name: azure login
       uses: azure/login@v1
       with:
