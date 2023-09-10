@@ -51,4 +51,4 @@ jobs:
           source "${{ github.workspace }}/infra/bootstrapping/sdk_helpers.sh";
           source "${{ github.workspace }}/infra/bootstrapping/init_environment.sh";
           bash -x ../../../run-job.sh pipeline.yml
-      working-directory: ${{ github.workspace }}
+      working-directory: /
