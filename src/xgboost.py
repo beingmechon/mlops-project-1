@@ -1,0 +1,4 @@
+"""Modules"""
+
+class XGBRegressor:
+    """XGBRegressor"""
