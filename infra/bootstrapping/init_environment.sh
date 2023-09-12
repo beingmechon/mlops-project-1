@@ -59,8 +59,8 @@ export timestamp=$(date +%s)
 # export AZURE_SERVICE_PRINCIPAL="github-sp-${PREFIX}${SUFFIX}"
 
 # check if the required variables are specified.
-echo $RESOURCE_GROUP_NAME
-echo $WORKSPACE_NAME
+echo "$RESOURCE_GROUP_NAME"
+echo "$WORKSPACE_NAME"
 
 RESOURCE_GROUP_NAME=${RESOURCE_GROUP_NAME:-}
 if [[ -z "$RESOURCE_GROUP_NAME" ]]
