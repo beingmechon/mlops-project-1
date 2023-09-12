@@ -54,6 +54,7 @@ jobs:
     command: >-
       python -m pip install --upgrade pip
       pip install -r ./requirements.txt |
+      pip freeze |
       echo ${{inputs.test_train_ratio}} |
       python train.py 
       --test_train_ratio ${{inputs.test_train_ratio}}       
