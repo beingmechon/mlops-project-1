@@ -6,8 +6,8 @@
 name: cli-jobs-pipelines-diabetes-pipeline
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "4 6/12 * * *"
+  # schedule:
+  #   - cron: "4 6/12 * * *"
   pull_request:
     branches:
       - main
