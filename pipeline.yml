@@ -52,6 +52,8 @@ jobs:
     environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
     compute: azureml:my-ci
     command: >-
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt |
       echo ${{inputs.test_train_ratio}} |
       python train.py 
       --test_train_ratio ${{inputs.test_train_ratio}}       
