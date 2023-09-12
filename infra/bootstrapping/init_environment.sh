@@ -115,6 +115,11 @@ then
     az login
 fi
 
+RESOURCE_GROUP_NAME="rg-ml-001"
+WORKSPACE_NAME="mlws001"
+REGISTRY_NAME="mlws0013884301878"
+SUBSCRIPTION_ID="6202d817-1165-4812-9031-c0f106108096"
+
 echo_title "RESOURCE_GROUP_NAME = \"${RESOURCE_GROUP_NAME}\" & LOCATION=\"${LOCATION}\" set as defaults. "
 az configure --defaults group="${RESOURCE_GROUP_NAME}" workspace="${WORKSPACE_NAME}" location="${LOCATION}"  # for subsequent commands.
 az account set -s "${SUBSCRIPTION_ID}" || exit 1
